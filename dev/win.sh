@@ -208,24 +208,12 @@ services:
       - /winmoon:/storage
     devices:
       - /dev/kvm:/dev/kvm
-    privileged: true  # Needed for proper KVM access
     cap_add:
       - NET_ADMIN
-      - SYS_ADMIN
-    security_opt:
-      - no-new-privileges:true
-    sysctls:
-      - net.ipv4.ip_forward=1
-      - net.ipv4.conf.all.promote_secondaries=1
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
     ports:
       - "8006:8006"
       - "3389:3389/tcp"
       - "3389:3389/udp"
-    networks:
-      - windows_net
     stop_grace_period: 2m
     restart: always
     logging:
@@ -233,24 +221,11 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-    mem_limit: 12G
-    memswap_limit: 14G
-    ulimits:
-      nofile:
-        soft: 65535
-        hard: 65535
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "3389"]
       interval: 30s
       timeout: 10s
       retries: 3
-networks:
-  windows_net:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.20.0.0/16
 EOF
 
     # Enkripsi file konfigurasi
@@ -266,11 +241,6 @@ EOF
             
             # Clear Docker network
             docker network prune -f
-            
-            # Set network parameters
-            sudo sysctl -w net.ipv4.ip_forward=1
-            sudo sysctl -w net.core.rmem_max=2500000
-            sudo sysctl -w net.core.wmem_max=2500000
             
             # Start with retry mechanism
             max_retries=3
