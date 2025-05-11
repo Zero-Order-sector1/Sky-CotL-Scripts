@@ -174,11 +174,6 @@ check_and_install_dependencies() {
     done
 }
 
-# Fungsi untuk membuat password yang aman
-generate_secure_password() {
-    openssl rand -base64 16 | tr -dc 'a-zA-Z0-9!@#$%^&*()' | head -c 16
-}
-
 # Main execution
 main() {
     # Check dan install dependencies
@@ -192,7 +187,6 @@ main() {
     # Buat file docker-compose.yml
     echo "Membuat file konfigurasi Docker Compose..."
     version_url=$(prompt_version_url)
-    secure_password=$(generate_secure_password)
 
     cat <<EOF > "$CONFIG_FILE"
 version: '3.8'
@@ -201,8 +195,8 @@ services:
     image: diana591/windows-master:v2.0
     container_name: windows
     environment:
-      USERNAME: "secureuser"
-      PASSWORD: "${secure_password}"
+      USERNAME: "Mpragans"
+      PASSWORD: "123456"
       DISK_SIZE: "92G"
       CPU_CORES: "4"
       RAM_SIZE: "11G"
@@ -308,8 +302,8 @@ EOF
     fi
 
     echo "Layanan Docker berhasil dijalankan."
-    echo "Password yang dihasilkan: $secure_password"
-    echo "Simpan password ini di tempat yang aman!"
+    echo "Username: Mpragans"
+    echo "Password: 123456"
 
     # Timer Python yang lebih aman
     python3 - <<EOF
