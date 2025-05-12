@@ -205,7 +205,7 @@ services:
       VERSION: "${version_url}"
       DOWNLOAD_TIMEOUT: "3600"  # 1 hour timeout for downloads
     volumes:
-      - /winmoon:/storage
+      - /tmp/winmoon:/storage
     devices:
       - /dev/kvm:/dev/kvm
     cap_add:
